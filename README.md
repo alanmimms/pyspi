@@ -31,22 +31,23 @@ config.commit()
   * Write protect region(s)?
 
 ## Read page
+`GET /read?addr=A&length=L`
 * Read content of device to a file (downloads image).
   * Support Intel hex format.
   * Support binary format.
-* `GET /read&addr=`_address_`&length=`_length_ Parameters
 * Checksum of device content: Simple 8-bit sum, MD5, SHA1, SHA256, SHA384, SHA512.
 
 ## Write page
-`POST` to `/write`
+`POST /write?addr=A&length=L`
 * `Content-Type: application/octet-stream` or `application/intel-hex`.
 * Upload content in Intel hex or binary format.
 
 ## Erase page
+`POST /erase?addr=A&length=L`
 * Erase one or more or all erasable regions in the device.
 
 ## Verify page
-`POST` to `/verify`
+`POST /verify?addr=A&length=L`
 * `Content-Type: application/octet-stream` or `application/intel-hex`.
 * Upload content in Intel hex or binary format and verify contents of device match precisely.
 * Report on differences.
