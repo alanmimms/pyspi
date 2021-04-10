@@ -23,6 +23,8 @@ config.commit()
 
 
 # Design
+## ReST API structure 
+
 ## Top level `index.html`
 
 * Identifies the device attached via SPI pins.
@@ -30,25 +32,32 @@ config.commit()
   * Erase size.
   * Write protect region(s)?
 
-## Read page
-`GET /read?addr=A&length=L`
+## ReST API
+* URIs for read, write, erase, verify
+* URI segment parameters:
+  * `address` - address to start operation in ASCII hex
+  * `length` - length of operation in ASCII hex
+* For read, write, verify: `Content-Type: application/octet-stream` or `application/intel-hex`.
+
+### Read page
+`GET /read/`_address_`/`_length_
 * Read content of device to a file (downloads image).
   * Support Intel hex format.
   * Support binary format.
 * Checksum of device content: Simple 8-bit sum, MD5, SHA1, SHA256, SHA384, SHA512.
+* Special case for length of `*` to indicate entire device content.
 
-## Write page
-`POST /write?addr=A&length=L`
-* `Content-Type: application/octet-stream` or `application/intel-hex`.
+### Write page
+`POST /write/`_address_`/`_length_
 * Upload content in Intel hex or binary format.
 
-## Erase page
-`POST /erase?addr=A&length=L`
-* Erase one or more or all erasable regions in the device.
+### Erase page
+`POST /erase/`_address_`/`_length_
+* Erase part of all of the device.
+* Special case for length of `*` to indicate entire device content.
 
-## Verify page
-`POST /verify?addr=A&length=L`
-* `Content-Type: application/octet-stream` or `application/intel-hex`.
+### Verify page
+`POST /verify/`_address_`/`_length_
 * Upload content in Intel hex or binary format and verify contents of device match precisely.
+  * Only compares number of bytes uploaded as image.
 * Report on differences.
-
